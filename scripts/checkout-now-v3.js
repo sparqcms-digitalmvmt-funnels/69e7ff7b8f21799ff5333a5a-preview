@@ -605,7 +605,7 @@ async function createOrderViaWallet(confirmationToken, paymentMethodId) {
         ?.getAttribute("data-shipping-profile-id") || undefined;
 
   const orderData = {
-    pageId: "e7h-E3x0mvN6mQvF_cKxNxvgppqjID5T61GzDckBIsO9uEaVJaYeDmRnvvLLEuG0",
+    pageId: "CJfPrYdkDgLV7AOm0Il-pBztHCRkp-HOFPJDIMKeaSARE7o2s3ia8PTCEz_rncZA",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1,
@@ -1393,7 +1393,7 @@ async function createOrderViaPaypal(isExpress = false) {
   const shippingProfileId = +document.querySelector(`[data-product-id="${selectedProduct.id}"]`)?.getAttribute('data-shipping-profile-id') || undefined;
   const sameAddress = isSameAddress();
   const orderData = {
-    pageId: "e7h-E3x0mvN6mQvF_cKxNxvgppqjID5T61GzDckBIsO9uEaVJaYeDmRnvvLLEuG0",
+    pageId: "CJfPrYdkDgLV7AOm0Il-pBztHCRkp-HOFPJDIMKeaSARE7o2s3ia8PTCEz_rncZA",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1, // VRIO URL ending /connection
@@ -1692,7 +1692,7 @@ async function createOrderViaKlarna() {
   const sameAddress = isSameAddress();
 
   const orderData = {
-    pageId: "e7h-E3x0mvN6mQvF_cKxNxvgppqjID5T61GzDckBIsO9uEaVJaYeDmRnvvLLEuG0",
+    pageId: "CJfPrYdkDgLV7AOm0Il-pBztHCRkp-HOFPJDIMKeaSARE7o2s3ia8PTCEz_rncZA",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1,
     email: email,
@@ -2070,7 +2070,7 @@ async function createOrderViaCreditCard() {
   let orderTotal = Math.max(0, Number(selectedProduct.price) * selectedProduct.quantity);
 
   const orderData = {
-    pageId: "e7h-E3x0mvN6mQvF_cKxNxvgppqjID5T61GzDckBIsO9uEaVJaYeDmRnvvLLEuG0",
+    pageId: "CJfPrYdkDgLV7AOm0Il-pBztHCRkp-HOFPJDIMKeaSARE7o2s3ia8PTCEz_rncZA",
     action: "process",
     campaign_id: CAMPAIGN_ID,
     connection_id: 1, // VRIO URL ending /connection
@@ -3986,7 +3986,7 @@ async function returnPaypal() {
 ;
 
     const body = {
-        pageId: "e7h-E3x0mvN6mQvF_cKxNxvgppqjID5T61GzDckBIsO9uEaVJaYeDmRnvvLLEuG0",
+        pageId: "CJfPrYdkDgLV7AOm0Il-pBztHCRkp-HOFPJDIMKeaSARE7o2s3ia8PTCEz_rncZA",
         action: "process",
         campaign_id: CAMPAIGN_ID,
         connection_id: 1,
