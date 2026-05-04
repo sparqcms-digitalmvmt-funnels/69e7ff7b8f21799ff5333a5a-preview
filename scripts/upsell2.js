@@ -1,7 +1,7 @@
 
 
 
-
+const EMAIL_OVERSIGHT_VALIDATE_URL = 'https://app-cms-api-proxy-prod-001.azurewebsites.net/integration/email-oversight/validate-public';
 
 let isTest = sessionStorage.getItem("test");
 if (isTest === null && isTest !== false) {
@@ -713,6 +713,13 @@ async function returnKlarna() {
       } catch (error) {
         console.error("Error sending transaction to data layer", error);
       }
+      try {
+        if (typeof sendKlaviyoOrderEvents === 'function') {
+          await sendKlaviyoOrderEvents(orderData, result, true);
+        }
+      } catch (error) {
+        console.error("Error sending order events to Klaviyo", error);
+      }
       const redirectSlug =
         typeof nextPageSlug === "string" && nextPageSlug.length > 0
           ? nextPageSlug.startsWith("/")
@@ -927,7 +934,7 @@ const processKlarnaUpsell = async () => {
         body: JSON.stringify({
           offers: offers.map((o) => JSON.stringify(o)),
           order_id: lastOrderId,
-          pageId: "Eb0U5QXM8G4BkT33Uc4HwcwmSbAEYIBonqYdBiaFl8eHYivOLPmbOGznCuTSVD9N"
+          pageId: "iRH3TKO0vbxDGtyWDFt8l4d2lfqr3eDIJzY7aPKvn3a84Ygi4GwaLesTcknzq_Bw"
         })
       }
     );
@@ -1007,7 +1014,7 @@ const processUpsell = async () => {
   }
   try {
     const orderData = JSON.parse(sessionStorage.getItem("orderData"));
-    orderData.pageId = "Eb0U5QXM8G4BkT33Uc4HwcwmSbAEYIBonqYdBiaFl8eHYivOLPmbOGznCuTSVD9N";
+    orderData.pageId = "iRH3TKO0vbxDGtyWDFt8l4d2lfqr3eDIJzY7aPKvn3a84Ygi4GwaLesTcknzq_Bw";
     const lastOrderId = sessionStorage.getItem("cms_oid");
     const stripePayment = JSON.parse(sessionStorage.getItem("stripePayment"));
     const isStripeTestOrder = stripePayment && !stripePayment.isLive;
@@ -1182,6 +1189,14 @@ const processUpsell = async () => {
     
     sendTransactionToDataLayer(vrioToTransaction(result), paymentMethodName);
 
+    try {
+      if (typeof sendKlaviyoOrderEvents === 'function') {
+        await sendKlaviyoOrderEvents(sanitizedOrderData, result);
+      }
+    } catch (error) {
+      console.error("Error sending order events to Klaviyo", error);
+    }
+
     window.location.href = getNextPageSlugForRedirect();
   } catch (error) {
     console.error(error);
@@ -1201,6 +1216,8 @@ const areAllProductsRecurring = () => {
   const pageProductIds = getUniqueSelectedProductIds();
   return pageProductIds.length > 0 && pageProductIds.every((productId) => isRecurringProduct(productId));
 }
+
+
 
 document.addEventListener("DOMContentLoaded", async () => {
   

@@ -1,7 +1,7 @@
 
 
 
-
+const EMAIL_OVERSIGHT_VALIDATE_URL = 'https://app-cms-api-proxy-prod-001.azurewebsites.net/integration/email-oversight/validate-public';
 
 let isTest = sessionStorage.getItem("test");
 if (isTest === null && isTest !== false) {
@@ -669,7 +669,7 @@ const processKlarnaUpsell = async () => {
         body: JSON.stringify({
           offers: offers.map((o) => JSON.stringify(o)),
           order_id: lastOrderId,
-          pageId: "oMzp3yfwJPJRN4uiDqnQ20MMh5KXdgt4RVKc6Z8Zi1sjMcAioc5PBsSc9ZYOOU4O"
+          pageId: "PsBUlAIPzbSubKLXVRrQwsG6LBZ6veFZIa2gAi0xyX_ingr8JWeqPGdepSDlHvRx"
         })
       }
     );
@@ -749,7 +749,7 @@ const processUpsell = async () => {
   }
   try {
     const orderData = JSON.parse(sessionStorage.getItem("orderData"));
-    orderData.pageId = "oMzp3yfwJPJRN4uiDqnQ20MMh5KXdgt4RVKc6Z8Zi1sjMcAioc5PBsSc9ZYOOU4O";
+    orderData.pageId = "PsBUlAIPzbSubKLXVRrQwsG6LBZ6veFZIa2gAi0xyX_ingr8JWeqPGdepSDlHvRx";
     const lastOrderId = sessionStorage.getItem("cms_oid");
     const stripePayment = JSON.parse(sessionStorage.getItem("stripePayment"));
     const isStripeTestOrder = stripePayment && !stripePayment.isLive;
@@ -924,6 +924,14 @@ const processUpsell = async () => {
     
     sendTransactionToDataLayer(vrioToTransaction(result), paymentMethodName);
 
+    try {
+      if (typeof sendKlaviyoOrderEvents === 'function') {
+        await sendKlaviyoOrderEvents(sanitizedOrderData, result);
+      }
+    } catch (error) {
+      console.error("Error sending order events to Klaviyo", error);
+    }
+
     window.location.href = getNextPageSlugForRedirect();
   } catch (error) {
     console.error(error);
@@ -943,6 +951,8 @@ const areAllProductsRecurring = () => {
   const pageProductIds = getUniqueSelectedProductIds();
   return pageProductIds.length > 0 && pageProductIds.every((productId) => isRecurringProduct(productId));
 }
+
+
 
 document.addEventListener("DOMContentLoaded", async () => {
   
